@@ -20,9 +20,9 @@ class ArticleController {
     @GetMapping
     fun articles(): MutableList<Article>  = articles
 
-    @GetMapping
-    fun articles(@PathVariable title: String): Article = articles.find {
-        article: Article ->  article.title == title
+    @GetMapping("/{slug}")
+    fun articles(@PathVariable slug: String): Article = articles.find {
+        article: Article ->  article.title == slug
     } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
     @PostMapping
@@ -31,17 +31,17 @@ class ArticleController {
         return article
     }
 
-    @PutMapping("/{title}")
-    fun updateArticle(@RequestBody article: Article, @PathVariable title: String): Article {
-        val existingArticle = articles.find {it.title ==
-                title} ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    @PutMapping("/{slug}")
+    fun updateArticle(@RequestBody article: Article, @PathVariable slug: String): Article {
+        val existingArticle = articles.find {it.slug ==
+                slug} ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
         existingArticle.content = article.content;
         return  article
     }
 
-    @DeleteMapping("/{title}")
-    fun deleteArticle(@PathVariable title: String) {
-        articles.removeIf{article -> article.title == title}
+    @DeleteMapping("/{slug}")
+    fun deleteArticle(@PathVariable slug: String) {
+        articles.removeIf{article -> article.title == slug}
     }
 
 }
